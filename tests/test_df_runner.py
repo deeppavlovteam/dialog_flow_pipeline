@@ -1,4 +1,6 @@
-from df_engine.core.script import Context
+from typing import List, Tuple, Callable
+
+from df_engine.core import Context
 
 from df_runner import Pipeline
 import importlib
@@ -6,13 +8,10 @@ import importlib
 import pytest
 
 
-# uncomment the following line, if you want to run your examples during the test suite or import from them
-
+# Uncomment the following line, if you want to run your examples during the test suite or import from them
 # pytest.skip(allow_module_level=True)
 
 import pathlib
-
-pathlib.Path("examples").glob("*.py")
 
 
 TURNS = [
@@ -24,23 +23,33 @@ TURNS = [
 ]
 
 
-def t_pipeline(pipeline: Pipeline):
-    for turn_id, (request, true_response) in enumerate(TURNS):
-        ctx: Context = pipeline(request)
+def run_pipeline_test(pipeline: Pipeline, turns: List[Tuple[str, str]]):
+    ctx = Context()
+    for turn_id, (request, true_response) in enumerate(turns):
+        ctx = pipeline(request, ctx.id)
         if true_response != ctx.last_response:
-            msg = f" turn_id={turn_id}"
+            msg = f" pipeline={pipeline}"
+            msg += f" turn_id={turn_id}"
             msg += f" request={request} "
             msg += f"\ntrue_response != out_response: "
             msg += f"\n{true_response} != {ctx.last_response}"
             raise Exception(msg)
 
 
-@pytest.mark.parametrize("module_path", pathlib.Path("examples").glob("*.py"))
+def run_pipeline_test_wrapping_response_into_html(pipeline: Pipeline, wrapper: Callable[[str], str]):
+    wrapped_turns = [(request, wrapper(response)) for request, response in TURNS]
+    run_pipeline_test(pipeline, wrapped_turns)
+
+
+@pytest.mark.parametrize(
+    "module_path", [file for file in pathlib.Path("examples").glob("*.py") if not file.stem.startswith("_")]
+)
 def test_examples(module_path):
-    if module_path.stem == "__init__":
-        return
     module = importlib.import_module(f"examples.{module_path.stem}")
     try:
-        t_pipeline(module.pipeline)
+        if module_path.stem.startswith("6"):
+            run_pipeline_test_wrapping_response_into_html(module.pipeline, module.construct_webpage_by_response)
+        else:
+            run_pipeline_test(module.pipeline, TURNS)
     except Exception as exc:
         raise Exception(f"model_name={module_path.stem}") from exc
