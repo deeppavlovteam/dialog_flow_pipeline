@@ -1,7 +1,7 @@
 import asyncio
 from typing import Callable, Any, Optional, List
 
-from df_runner import Wrapper, StartConditionCheckerFunction
+from df_pipeline import Wrapper, StartConditionCheckerFunction
 
 
 async def wrap_sync_function_in_async(function: Callable, *args, **kwargs) -> Any:

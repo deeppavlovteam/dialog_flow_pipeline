@@ -34,12 +34,12 @@ test_requirements = parse_requirements("requirements_test.txt")
 
 
 setup(
-    name="df_runner",
-    version="0.2.1",
+    name="df_pipeline",
+    version="0.3.0",
     description=description,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/deepmipt/dialog_flow_runner",
+    url="https://github.com/deepmipt/dialog_flow_pipeline",
     author="Denis Kuznetsov",
     author_email="kuznetsov.den.p@gmail.com",
     classifiers=[  # Optional
@@ -58,7 +58,7 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3 :: Only",
     ],
-    keywords=["chatbots", "Dialog Flow Runner"],  # Optional
+    keywords=["chatbots", "Dialog Flow Pipeline"],  # Optional
     packages=find_packages(where="."),  # Required
     include_package_data=True,
     python_requires=">=3.6, <4",

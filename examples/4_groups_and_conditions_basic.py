@@ -2,7 +2,7 @@ import json
 import logging
 from df_engine.core import Actor
 
-from df_runner import Service, Pipeline, not_condition, service_successful_condition, ServiceRuntimeInfo
+from df_pipeline import Service, Pipeline, not_condition, service_successful_condition, ServiceRuntimeInfo
 from examples._utils import SCRIPT
 
 logging.basicConfig(level="INFO")

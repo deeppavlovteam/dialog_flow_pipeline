@@ -2,14 +2,14 @@ import logging
 
 from df_engine.core import Context
 
-from df_runner import Pipeline, CLIMessengerInterface
+from df_pipeline import Pipeline, CLIMessengerInterface
 from examples._utils import SCRIPT
 
 logging.basicConfig(level="INFO")
 logger = logging.getLogger(__name__)
 
 """
-The following example shows more advanced usage of `df_runner` module, as an extension to `df_engine`.
+The following example shows more advanced usage of `df_pipeline` module, as an extension to `df_engine`.
 
 When Pipeline is created with `from_script` method, additional pre- and postprocessors can be defined.
 These can be any ServiceBuilder objects (defined in `types` module) - callables, objects or dicts.

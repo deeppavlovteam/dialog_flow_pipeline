@@ -1,10 +1,10 @@
 from df_engine.core import Context
 
-from df_runner import Pipeline
+from df_pipeline import Pipeline
 from examples._utils import SCRIPT
 
 """
-The following example shows basic usage of `df_runner` module, as an extension to `df_engine`.
+The following example shows basic usage of `df_pipeline` module, as an extension to `df_engine`.
 
 Pipeline is an object, that automates Actor execution and context management.
 `from_script` method can be used to create a pipeline of the most basic structure:

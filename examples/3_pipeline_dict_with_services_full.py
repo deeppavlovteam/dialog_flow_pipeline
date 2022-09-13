@@ -3,7 +3,7 @@ import urllib.request
 
 from df_engine.core import Context, Actor
 
-from df_runner import CLIMessengerInterface, Service, Pipeline, ServiceRuntimeInfo
+from df_pipeline import CLIMessengerInterface, Service, Pipeline, ServiceRuntimeInfo
 from examples._utils import SCRIPT
 
 logging.basicConfig(level="INFO")

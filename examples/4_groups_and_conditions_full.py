@@ -2,7 +2,7 @@ import json
 import logging
 from df_engine.core import Actor
 
-from df_runner import (
+from df_pipeline import (
     Service,
     Pipeline,
     ServiceGroup,

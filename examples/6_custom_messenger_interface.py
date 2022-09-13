@@ -4,7 +4,7 @@ from df_engine.core import Context, Actor
 from df_engine.core.context import get_last_index
 from flask import Flask, request, Request
 
-from df_runner import Pipeline, CallbackMessengerInterface
+from df_pipeline import Pipeline, CallbackMessengerInterface
 from examples._utils import SCRIPT
 
 logging.basicConfig(level="INFO")

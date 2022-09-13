@@ -6,7 +6,7 @@ from datetime import datetime
 import psutil
 from df_engine.core import Context, Actor
 
-from df_runner import Wrapper, Pipeline, ServiceGroup, to_service, WrapperRuntimeInfo, ServiceRuntimeInfo
+from df_pipeline import Wrapper, Pipeline, ServiceGroup, to_service, WrapperRuntimeInfo, ServiceRuntimeInfo
 from examples._utils import SCRIPT
 
 logging.basicConfig(level="INFO")

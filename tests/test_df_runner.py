@@ -2,7 +2,7 @@ from typing import List, Tuple, Callable
 
 from df_engine.core import Context
 
-from df_runner import Pipeline
+from df_pipeline import Pipeline
 import importlib
 
 import pytest

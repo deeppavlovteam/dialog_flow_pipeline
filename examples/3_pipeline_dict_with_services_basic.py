@@ -2,7 +2,7 @@ import logging
 
 from df_engine.core import Actor
 
-from df_runner import Service, Pipeline
+from df_pipeline import Service, Pipeline
 from examples._utils import SCRIPT
 
 logging.basicConfig(level="INFO")

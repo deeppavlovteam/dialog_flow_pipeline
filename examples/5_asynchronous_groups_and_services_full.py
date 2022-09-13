@@ -5,7 +5,7 @@ import urllib.request
 
 from df_engine.core import Actor, Context
 
-from df_runner import ServiceGroup, Pipeline, ServiceRuntimeInfo
+from df_pipeline import ServiceGroup, Pipeline, ServiceRuntimeInfo
 from examples._utils import SCRIPT
 
 logging.basicConfig(level="INFO")
