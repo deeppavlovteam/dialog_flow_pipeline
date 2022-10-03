@@ -1,11 +1,3 @@
-"""
-Example for future documenting!
-===============================
-
-TODO: update documentation to match this file
-TODO: fix function definition types, rn they are faaar too long
-"""
-
 import logging
 import abc
 import asyncio
@@ -36,20 +28,16 @@ class PipelineComponent(abc.ABC):
     It contains some fields that they have in common.
 
     :param list wrappers: list of Wrappers, associated with this component
-    :param int timeout: (for asynchronous only!) maximum component execution time (in seconds),
-    if it exceeds this time, it is interrupted
-    :param bool requested_async_flag: requested asynchronous property;
-    if not defined, calculated_async_flag is used instead
+    :param int timeout: (for asynchronous only!) maximum component execution time (in seconds), if it exceeds this time, it is interrupted
+    :param bool requested_async_flag: requested asynchronous property; if not defined, calculated_async_flag is used instead
     :param bool calculated_async_flag: whether the component can be asynchronous or not
 
-        - for :py:class:`~df_pipeline.service.service.Service`: whether its ``handler`` is asynchronous or not
-        - for :py:class:`~df_pipeline.service.group.ServiceGroup`: whether all its ``services`` are asynchronous or not
+        - for :py:class:`~df_runner.service.service.Service`: whether its ``handler`` is asynchronous or not
+        - for :py:class:`~df_runner.service.group.ServiceGroup`: whether all its ``services`` are asynchronous or not
 
-    :param start_condition: StartConditionCheckerFunction that is invoked before each component execution;
-    component is executed only if it returns True
-    :type start_condition: :py:class:`~df_pipeline.types.StartConditionCheckerFunction`
-    :param name: component name (should be unique in single :py:class:`~df_pipeline.service.group.ServiceGroup`),
-    should not be blank or contain '.' symbol
+    :param start_condition: StartConditionCheckerFunction that is invoked before each component execution; component is executed only if it returns True
+    :type start_condition: :py:class:`~df_runner.types.StartConditionCheckerFunction`
+    :param name: component name (should be unique in single :py:class:`~df_runner.service.group.ServiceGroup`), should not be blank or contain '.' symbol
     :param path: dot-separated path to component, is universally unique
     :type path: str or None
     """
@@ -65,21 +53,16 @@ class PipelineComponent(abc.ABC):
         name: Optional[str] = None,
         path: Optional[str] = None,
     ):
-        #: Maximum component execution time (in seconds),
-        #: if it exceeds this time, it is interrupted (for asynchronous only!)
-        self.timeout = timeout
-        #: Requested asynchronous property; if not defined, :py:attr:`~requested_async_flag` is used instead
-        self.requested_async_flag = requested_async_flag
-        #: Calculated asynchronous property, whether the component can be asynchronous or not
-        self.calculated_async_flag = calculated_async_flag
-        #: Component start condition that is invoked before each component execution;
-        #: component is executed only if it returns True
-        self.start_condition = always_start_condition if start_condition is None else start_condition
-        #: Component name (should be unique in single :py:class:`~df_pipeline.service.group.ServiceGroup`),
-        #: should not be blank or contain '.' symbol
-        self.name = name
-        #: Вot-separated path to component (should be is universally unique)
-        self.path = path
+        self.timeout = timeout  #: Maximum component execution time (in seconds), if it exceeds this time, it is interrupted (for asynchronous only!)
+        self.requested_async_flag = requested_async_flag  #: Requested asynchronous property; if not defined, :py:attr:`~requested_async_flag` is used instead
+        self.calculated_async_flag = (
+            calculated_async_flag  #: Calculated asynchronous property, whether the component can be asynchronous or not
+        )
+        self.start_condition = (
+            always_start_condition if start_condition is None else start_condition
+        )  #: Component start condition that is invoked before each component execution; component is executed only if it returns True
+        self.name = name  #: Component name (should be unique in single :py:class:`~df_runner.service.group.ServiceGroup`), should not be blank or contain '.' symbol
+        self.path = path  #: Вot-separated path to component (should be is universally unique)
 
         self.before_wrapper = Wrapper([] if before_wrapper is None else before_wrapper)
         self.before_wrapper.stage = WrapperStage.BEFORE
@@ -95,13 +78,12 @@ class PipelineComponent(abc.ABC):
 
     def _set_state(self, ctx: Context, value: ComponentExecutionState):
         """
-        Method for component runtime state setting, state is preserved in ``ctx.framework_states`` dict,
-        in subdict, dedicated to this library.
+        Method for component runtime state setting, state is preserved in ``ctx.framework_states`` dict, in subdict, dedicated to this library.
 
         :param ctx: context to keep state in
         :type ctx: :py:class:`df_engine.core.Context`
         :param value: state to set
-        :type value: :py:class:`~df_pipeline.types.ComponentExecutionState`
+        :type value: :py:class:`~df_runner.types.ComponentExecutionState`
         :return: None
         """
         if PIPELINE_STATE_KEY not in ctx.framework_states:
@@ -110,15 +92,13 @@ class PipelineComponent(abc.ABC):
 
     def get_state(self, ctx: Context, default: Optional[ComponentExecutionState] = None) -> ComponentExecutionState:
         """
-        Method for component runtime state getting, state is preserved in `ctx.framework_states` dict,
-        in subdict, dedicated to this library.
+        Method for component runtime state getting, state is preserved in `ctx.framework_states` dict, in subdict, dedicated to this library.
 
         :param ctx: context to get state from
         :type ctx: :py:class:`df_engine.core.Context`
-        :param default: default to return if no record found
-        (usually it's :py:attr:`~df_pipeline.types.ComponentExecutionState.NOT_RUN`)
-        :type default: :py:class:`~df_pipeline.types.ComponentExecutionState` or None
-        :return: :py:class:`~df_pipeline.types.ComponentExecutionState` of this service or default if not found
+        :param default: default to return if no record found (usually it's :py:attr:`~df_runner.types.ComponentExecutionState.NOT_RUN`)
+        :type default: :py:class:`~df_runner.types.ComponentExecutionState` or None
+        :return: :py:class:`~df_runner.types.ComponentExecutionState` of this service or default if not found
         """
         return ComponentExecutionState[
             ctx.framework_states[PIPELINE_STATE_KEY].get(self.path, default if default is not None else None)
@@ -130,13 +110,10 @@ class PipelineComponent(abc.ABC):
         Property, that indicates, whether this component is synchronous or asynchronous.
         It is calculated according to following rule:
 
-           1. If component **can** be asynchronous and :py:attr:`~requested_async_flag` is set,
-           it returns :py:attr:`~requested_async_flag`
+           1. If component **can** be asynchronous and :py:attr:`~requested_async_flag` is set, it returns :py:attr:`~requested_async_flag`
            2. If component **can** be asynchronous and :py:attr:`~requested_async_flag` isn't set, it returns True
-           3. If component **can't** be asynchronous and :py:attr:`~requested_async_flag` is False or not set,
-           it returns False
-           4. If component **can't** be asynchronous and :py:attr:`~requested_async_flag` is True,
-           an Exception is thrown in constructor
+           3. If component **can't** be asynchronous and :py:attr:`~requested_async_flag` is False or not set, it returns False
+           4. If component **can't** be asynchronous and :py:attr:`~requested_async_flag` is True, an Exception is thrown in constructor
 
         :return: bool
         """
@@ -173,8 +150,7 @@ class PipelineComponent(abc.ABC):
         :type ctx: :py:class:`df_engine.core.Context`
         :param actor: this Pipeline Actor or None if this is a service, that wraps Actor
         :type actor: :py:class:`df_engine.core.Actor` or None
-        :return: Context if this is a synchronous service or :py:class:`~typing.const.Awaitable`,
-        asynchronous services shouldn't modify Context
+        :return: Context if this is a synchronous service or :py:class:`~typing.const.Awaitable`, asynchronous services shouldn't modify Context
         """
         if self.asynchronous:
             task = asyncio.create_task(self._run(ctx, actor), name=self.name)
@@ -185,8 +161,7 @@ class PipelineComponent(abc.ABC):
     def add_wrapper(self, global_wrapper_type: GlobalWrapperType, wrapper: WrapperFunction):
         """
         Method for adding a global wrapper to this particular component.
-        Wrapper is automatically named using :py:meth:`uuid.uuid4`
-        and depending on wrapper type for debugging/logging purposes.
+        Wrapper is automatically named using :py:meth:`uuid.uuid4` and depending on wrapper type for debugging/logging purposes.
 
         :param global_wrapper_type: a type of wrapper to add
         :type global_wrapper_type: :py:class:`~df_engine.typing.GlobalWrapperType`
@@ -203,8 +178,7 @@ class PipelineComponent(abc.ABC):
 
         :param ctx: current dialog Context
         :type ctx: :py:class:`df_engine.core.Context`
-        :return: :py:class:`~df_engine.typing.ServiceRuntimeInfo`
-        dict where all not set fields are replaced with ``[None]``.
+        :return: :py:class:`~df_engine.typing.ServiceRuntimeInfo` dict where all not set fields are replaced with ``[None]``.
         """
         return {
             "name": self.name if self.name is not None else "[None]",

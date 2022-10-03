@@ -48,10 +48,9 @@ test_all: venv test lint
 .PHONY: test_all
 
 build_doc: venv
-	# $(VENV_PATH)/bin/sphinx-apidoc -e -f -o docs/source/apiref df_pipeline
-	# $(VENV_PATH)/bin/sphinx-build -M clean docs build
-	# $(VENV_PATH)/bin/sphinx-build -M html docs build
-	$(VENV_PATH)/bin/sphinx-build docs build
+	$(VENV_PATH)/bin/sphinx-apidoc -e -f -o docs/source/apiref df_pipeline
+	$(VENV_PATH)/bin/sphinx-build -M clean docs/source docs/build
+	$(VENV_PATH)/bin/sphinx-build -M html docs/source docs/build
 .PHONY: build_doc
 
 pre_commit: venv
