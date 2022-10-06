@@ -52,7 +52,7 @@ class Pipeline:
         self.messenger_interface = CLIMessengerInterface() if messenger_interface is None else messenger_interface
         self.context_storage = {} if context_storage is None else context_storage
         self._services_pipeline = ServiceGroup(
-            components,
+            components,  # todo: components might be None
             before_handler=before_handler,
             after_handler=after_handler,
             timeout=timeout,
@@ -109,7 +109,7 @@ class Pipeline:
         """
         Property for retrieving info dictionary about this pipeline.
         Returns info dict, containing most important component public fields as well as its type.
-        All complex or unserializable fields here are replaced with 'Instance of [type]'.
+        All complex or non-serializable fields here are replaced with 'Instance of [type]'.
         """
         return {
             "type": type(self).__name__,
@@ -135,7 +135,8 @@ class Pipeline:
         start_label: NodeLabel2Type,
         fallback_label: Optional[NodeLabel2Type] = None,
         context_storage: Optional[Union[DBAbstractConnector, Dict]] = None,
-        messenger_interface: MessengerInterface = CLIMessengerInterface(),
+        messenger_interface: MessengerInterface = CLIMessengerInterface(),  # todo: the same object initialized here will be used in all further ``from_script`` calls
+        # todo: should probably be ``Optional[MessengerInterface] = None,``
         pre_services: Optional[List[Union[ServiceBuilder, ServiceGroupBuilder]]] = None,
         post_services: Optional[List[Union[ServiceBuilder, ServiceGroupBuilder]]] = None,
     ):
@@ -159,7 +160,7 @@ class Pipeline:
         post_services = [] if post_services is None else post_services
         return cls(
             messenger_interface=messenger_interface,
-            context_storage=context_storage if context_storage is None else context_storage,
+            context_storage=context_storage if context_storage is None else context_storage,  # todo: probably something else if ``context_storage is None``
             components=[*pre_services, actor, *post_services],
         )
 

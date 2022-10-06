@@ -15,6 +15,8 @@ async def wrap_sync_function_in_async(function: Callable, *args, **kwargs) -> An
         return await function(*args, **kwargs)
     else:
         return function(*args, **kwargs)
+    # todo: if it's a wrapper it should return a function. Such as ``lambda: function(*args, **kwargs)``
+    # todo: otherwise the function should be called ``call_sync_function_in_async`` or ``exec_sync_function_in_async``
 
 
 def _get_attrs_with_updates(

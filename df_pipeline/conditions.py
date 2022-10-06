@@ -41,7 +41,7 @@ def not_condition(function: StartConditionCheckerFunction) -> StartConditionChec
     Returns StartConditionCheckerFunction.
     """
 
-    def not_fun(ctx: Context, actor: Actor):
+    def not_fun(ctx: Context, actor: Actor):  # todo: rename fun to func or function
         return not function(ctx, actor)
 
     return not_fun
@@ -57,7 +57,7 @@ def aggregate_condition(
     Returns StartConditionCheckerFunction.
     """
 
-    def aggregation_fun(ctx: Context, actor: Actor):
+    def aggregation_fun(ctx: Context, actor: Actor):  # todo: rename fun to func or function
         return aggregator([function(ctx, actor) for function in functions])
 
     return aggregation_fun

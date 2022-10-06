@@ -195,7 +195,7 @@ class ServiceGroup(PipelineComponent):
         """
         super().add_extra_handler(global_extra_handler_type, extra_handler)
         for service in self.components:
-            if not condition(service.path):
+            if not condition(service.path):  # todo: might be None
                 continue
             if isinstance(service, Service):
                 service.add_extra_handler(global_extra_handler_type, extra_handler)
