@@ -20,7 +20,7 @@ class ComponentExecutionState(Enum):
     """
     Enum, representing pipeline component execution state.
     These states are stored in `ctx.framework_keys[PIPELINE_STATE_KEY]`,
-        thety should always be requested with `NOT_RUN` being default fallback.
+        they should always be requested with `NOT_RUN` being default fallback.
     Following states are supported:
         NOT_RUN: component has not been executed yet (the default one)
         RUNNING: component is currently being executed
@@ -74,7 +74,7 @@ PIPELINE_STATE_KEY = "PIPELINE"
 
 """
 A function type for messenger_interface-to-client interaction.
-Accepts anything (user input) and hashable vaklue (current dialog id), returns string (answer from pipeline).
+Accepts anything (user input) and hashable value (current dialog id), returns string (answer from pipeline).
 """
 PipelineRunnerFunction = Callable[[Any, Hashable], Awaitable[Context]]
 

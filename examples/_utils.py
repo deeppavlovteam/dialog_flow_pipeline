@@ -45,7 +45,7 @@ TURNS = (
 
 
 def get_auto_arg() -> bool:
-    return "-a" in sys.argv[1:]
+    return "-a" in sys.argv[1:]  # todo: If new arguments will be added: arguments can also be passed in groups: ``-abc``
 
 
 class ConsoleFormatter(logging.Formatter):
@@ -74,6 +74,7 @@ def auto_run_pipeline(
         handler.setLevel(logging.DEBUG)
         handler.setFormatter(ConsoleFormatter())
         logger.addHandler(handler)
+    # todo: maybe add a null logger to avoid further use of ``if logger is not None``
 
     for turn_id, (request, true_response) in enumerate(wrapped_turns):
         if logger is not None:
